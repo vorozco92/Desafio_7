@@ -1,6 +1,8 @@
 import { Router } from "express"
 import userModel  from "../dao/models/users.model.js"
-
+import { createHash } from "../utils.js";
+import { isValidPassword } from "../utils.js";
+import passport from "passport";
 const router = Router();
 //const userModel = new userModel();
 
@@ -40,6 +42,52 @@ router.post('/login',async(req,res)=>{
     }
     res.send({status:"success",payload:req.session.user, message:"Nuestro primer logueo"})
 })
+
+/**Logueo con github */
+
+router.post('/registerGit',passport.authenticate('registerGithub',{failureRedirect:'/failregister'}),async(req,res)=>{
+    res.send({status:"success",message:"User Register"})
+})
+
+router.get('/failregister',async(req,res)=>{
+    res.send({error:"failed"})
+})
+
+
+router.post('/loginGit',passport.authenticate('loginGithub',{failureRedirect:'/faillogin'}),async(req,res)=>{
+  console.log("Probando el ingreso a la estrategia")
+
+  const { email ,password}=req.body;
+
+  
+  if(!req.user) return res.status(400).send({status:"error", error:"Incorrect Password"})
+
+  req.session.user={ 
+    first_name: req.user.first_name,
+    last_name: req.user.last_name,
+    age: req.user.age,
+    email:req.user.email
+  }
+  res.send({status:"success",payload:req.user})
+})
+
+router.get('/github',passport.authenticate('github',{scope:['user:email']}),async(req,res)=>{
+
+ 
+
+})
+
+ 
+
+router.get('/githubcallback',passport.authenticate('github',{failureRedirect:'/login'}),async(req,res)=>{
+
+    req.session.user=req.user
+
+    res.redirect('/api/products')
+
+
+})
+
 
 router.post('/logout',async(req,res)=>{
     if (req.session.user)

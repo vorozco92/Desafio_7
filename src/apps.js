@@ -5,7 +5,7 @@ import __dirname from "./utils.js"
 
 //import viewRouter from "./routes/views.router.js"
 import handlebars from "express-handlebars" 
-import initializatedPassport  from "./config/passport.config.js"; 
+import {initializatedPassport ,initPassportGit} from "./config/passport.config.js"; 
 import passport  from "passport";
 import mongoose from "mongoose"
 import { Server } from 'socket.io'
@@ -45,6 +45,7 @@ app.use(session({
 }))
 
 initializatedPassport()
+initPassportGit()
 app.use(passport.initialize())
 app.use(passport.session())
 
