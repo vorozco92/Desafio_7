@@ -18,7 +18,7 @@ router.get('/',async(req,res)=>{
     let products = await productManager.getAll(limit, page, sort, body);
     //console.log(products)
 
-    if (! products.docs.length)
+    if (products.docs && ! products.docs.length)
        res.send({status:'error', error:'No se obtuvieron resultados de productos'})
     else
         res.render('products',{status:'success',

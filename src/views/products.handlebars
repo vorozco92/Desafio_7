@@ -6,6 +6,13 @@
 
     <h5 style="text-align:right" >Bienvenido {{user.name}},  ({{#if user.rol }} {{user.rol}} {{else}} usuario{{/if}}) {{user.email}}</h5>
     
+    <div>
+        <h1>ChatBox </h1>
+        <input id="chatBox">   
+        <p id="messageLogs">
+        </p>
+        
+    </div>
     <table id="listTable">
         <tr>
             <th>ID</th>
@@ -68,4 +75,4 @@
 </div>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="../../js/index.js"></script>
+<script src="../../js/indexReal.js"></script>

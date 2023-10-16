@@ -1,7 +1,7 @@
 import express from "express"
 import session from "express-session"
 import MongoStore from "connect-mongo"
-import __dirname from "./utils.js"
+import __dirname from "./utils/utils.js"
 
 //import viewRouter from "./routes/views.router.js"
 import handlebars from "express-handlebars" 
@@ -9,6 +9,7 @@ import {initializatedPassport ,initPassportGit} from "./config/passport.config.j
 import passport  from "passport";
 import mongoose from "mongoose"
 import { Server } from 'socket.io'
+import cookieParser from 'cookie-parser'
 
 //import coursesRouter from "../src/routes/courses.router.js"
 import cartsRouter from "../src/routes/carts.router.js"
@@ -26,12 +27,14 @@ mongoose.set('strictQuery',true)
 const connection  = mongoose.connect(stringConnect,{
     useNewUrlParser:true,
     useUnifiedTopology: true
-}) 
+})
 
 const server = app.listen(PORT, ()=>{console.log("Server arriba")})
 const io = new Server(server)
 
 app.io = io;
+
+app.use(cookieParser());
 
 app.use(session({
     store: MongoStore.create({
@@ -50,13 +53,13 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.engine('handlebars', handlebars.engine())
-app.set('views', __dirname + '/views')
+app.set('views', __dirname + '/../views')
 app.set('view engine', 'handlebars')
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/../public'))
 app.use('/api/products', productsRouter)
 app.use('/api/carts',cartsRouter);
 app.use('/realtimeproducts',realTimeRouter);
